@@ -6,7 +6,7 @@ public class Ticket {
    private boolean isPremium;
    private int id;
    
-   public Ticket (Double priceIn, int seatNumIn, int rowIn, boolean IsPremiumIn, int idIn) {
+   public Ticket (Double priceIn, int seatNumIn, int rowIn, boolean isPremiumIn, int idIn) {
       price = priceIn;
       seatNum = seatNumIn;
       row = rowIn;
@@ -23,7 +23,7 @@ public class Ticket {
    }
 
    public int getRow () {
-      return price;
+      return row;
    }
 
    public boolean getType () {
@@ -33,3 +33,4 @@ public class Ticket {
    public int getID () {
       return id;
    }
+}
