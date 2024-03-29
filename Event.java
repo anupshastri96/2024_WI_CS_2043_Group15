@@ -8,6 +8,8 @@ public class Event
 	private Schedule schedule;
 	private boolean isOpen;
 	private ArrayList<Ticket> ticketsSold;
+	private static int nextEventNum = 1000;
+	private int eventNum = 1000;
 
 	public Event(String nameIn, String descIn, Venue venIn, Schedule schIn)
 	{
@@ -15,6 +17,8 @@ public class Event
 		description = descIn;
 		venue = venIn;
 		schedule = schIn;
+		eventNum = nextEventNum;
+		nextEventNum++;
 
 		isOpen = true;
 		ticketsSold = new ArrayList<Ticket>();
@@ -69,4 +73,16 @@ public class Event
 	{
 		return isOpen;
 	}
+	
+	public void changeSchedule(String newDate, String newStartTime, String newEndTime)
+	{
+		Schedule newSchedule = new Schedule (newDate, newStartTime, newEndTime);
+		schedule = newSchedule;
+	}
+	
+	public int getEventNumber()
+	{
+		return eventNum;
+	}
+	
 }

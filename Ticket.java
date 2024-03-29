@@ -5,13 +5,14 @@ public class Ticket {
    private int row;
    private boolean isPremium;
    private int id;
+   private static int count = 1000;
    
-   public Ticket (Double priceIn, int seatNumIn, int rowIn, boolean isPremiumIn, int idIn) {
+   public Ticket (Double priceIn, int seatNumIn, int rowIn, boolean isPremiumIn) {
       price = priceIn;
       seatNum = seatNumIn;
       row = rowIn;
       isPremium = isPremiumIn;
-      id = idIn;
+      id = ++count;
    }   
    
    public Double getPrice () {
@@ -33,4 +34,16 @@ public class Ticket {
    public int getID () {
       return id;
    }
+
+	public void changeType()
+	{
+		if(isPremium==true)
+		{
+			isPremium=false;
+		}
+		else
+		{
+			isPremium=true;
+		}
+	}
 }
