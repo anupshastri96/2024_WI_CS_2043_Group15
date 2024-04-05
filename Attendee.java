@@ -4,13 +4,15 @@ public class Attendee
 
    	private String name;
    	private String email;
+	private String password;
   	private ArrayList<Ticket> purchasedTickets;
 	private Ticket t;
    
-   	public Attendee(String nameIn, String emailIn) 
+   	public Attendee(String nameIn, String emailIn, String passwordIn) 
 	{
       		name = nameIn;
       		email = emailIn;
+		password = passwordIn;
       		purchasedTickets = new ArrayList<Ticket>();
    	}
    
@@ -65,5 +67,10 @@ public class Attendee
 	public ArrayList<Ticket> viewTickets()
 	{
 		return purchasedTickets;
+	}
+
+	public String getPassword()
+	{
+		return password;
 	}
 }

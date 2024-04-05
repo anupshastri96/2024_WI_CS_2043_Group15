@@ -5,18 +5,21 @@ public class Ticket {
    private int row;
    private boolean isPremium;
    private int id;
-   private static int count = 1000;
+   private static int count = 2000;
+   private int eventID;
+   private String eventName;
    
-   public Ticket (Double priceIn, int seatNumIn, int rowIn, boolean isPremiumIn) {
-      price = priceIn;
+   public Ticket (String eNameIn, int seatNumIn, int rowIn, boolean isPremiumIn, int eventIDin) {
+      eventName = eNameIn;
       seatNum = seatNumIn;
       row = rowIn;
       isPremium = isPremiumIn;
+      eventID = eventIDin;
       id = ++count;
    }   
    
-   public Double getPrice () {
-      return price;
+   public String getEName () {
+      return eventName;
    }
 
    public int getSeat () {
@@ -29,6 +32,10 @@ public class Ticket {
 
    public boolean getType () {
       return isPremium;
+   }
+
+   public int getEID () {
+      return eventID;
    }
 
    public int getID () {

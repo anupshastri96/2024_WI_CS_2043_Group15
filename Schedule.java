@@ -109,5 +109,33 @@ public class Schedule
 		}
 		return vd;
 	}
+
+	public String convertTime(String t)
+	{
+		String period;
+		String hour = t.substring(0,2);
+		int numHour = Integer.parseInt(hour);
+
+		if(numHour>12)
+		{
+			numHour = numHour-12;
+			period = "PM";
+		}
+		else
+		{
+			period = "AM";
+		}
+		
+		String newTime;
+		if(numHour<10)
+		{
+			newTime = "0" + numHour + t.substring(2) + period;
+		}
+		else
+		{
+			newTime = numHour + t.substring(2) + period;
+		}
+		return newTime;
+	}
 }
 		
