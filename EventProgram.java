@@ -5,54 +5,44 @@ public class EventProgram
 	public static void main(String[] args)
 	{
 		ArrayList<Attendee> aList = new ArrayList<Attendee>();
-		Attendee att = new Attendee("John Smith","johnsmith@gmail.com", "abcdefg");
-		aList.add(att);
-		att = new Attendee("Mary Lastname","marylastname@gmail.com", "uhhhhhhhhh51");
-		aList.add(att);
-
+		Attendee att;
 		ArrayList<Ticket> tList = new ArrayList<Ticket>();
 		ArrayList<Event> eventList = new ArrayList<Event>();
-		Venue v = new Venue("Fredericton Convention  Centre", 2, 120, "10:00AM", "10:00PM", "5x10 Rectangular");
-		Schedule sch = new Schedule("September 20, 2024", "2:00PM", "4:00PM");
-		Event eTemp = new Event("Bake With Bob", "A comedy show in which Bob tries to bake a cake, except he has no idea how",v,sch, "Bob Bob");
-		eventList.add(eTemp);
-		sch = new Schedule("September 21, 2024","2:00PM", "4:00PM");
-		eTemp = new Event ("World's Worst Rap Battle", "Participants all write a rap for a rap battle, but must run it through Google Translate 20 times, then they must rap the output abomination", v, sch, "Super Mario");
-		eventList.add(eTemp);
+		Venue v;
+		Schedule sch;
+		Event eTemp;
 		Ticket tTemp;
-		int index, row, num, eID;
+		int index, row, num, eID, tID, venueFloor, venueRoom, eventNum;
 		Double price;
-		boolean prem;
-		String email, p;
+		boolean prem, eCheck, pCheck, found, looping;
+		String email, p, eventName, description, speaker, venueLocation, venueOpening, venueClosing, venueSeating, scheduleDate, scheduleStart, scheduleEnd, newBreak;
 		Attendee aTemp;
 
 		String password = "password123";
 		boolean loop = true;
 		char in;
-		int tID = 1000;
 
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Are you an attendee (A) or staff (S)?");
-		char ch = sc.next().charAt(0);
-		char ch2 = Character.toUpperCase(ch);
+		in = sc.next().charAt(0);
+		in = Character.toUpperCase(in);
 		boolean closeProgram = false;
 		boolean passKill = false;
 		ArrayList<Ticket> allT;
-		boolean eCheck, pCheck;
 		int attInd = 0;
 
-		if((ch2!='S')&&(ch2!='A'))
+		if((in!='S')&&(in!='A'))
 		{
-			while((ch2!='S')&&(ch2!='A'))
+			while((in!='S')&&(in!='A'))
 			{
 				System.out.println("Invalid input. Please enter A or S.");
-				ch = sc.next().charAt(0);
-				ch2 = Character.toUpperCase(ch);
+				in = sc.next().charAt(0);
+				in = Character.toUpperCase(in);
 			}
 		}
 		while(closeProgram==false)
 		{
-			if(ch2=='A')
+			if(in=='A')
 			{
 				System.out.println("Do you already have an account? Y or N");
 				in = sc.next().charAt(0);
@@ -233,7 +223,7 @@ public class EventProgram
 				}
 			}
 
-			if(ch2=='S')
+			if(in=='S')
 			{
 				System.out.println("Please enter the password.");
 				p = sc.nextLine();
@@ -261,153 +251,124 @@ public class EventProgram
 							System.out.println("\nPlease enter the name of your event, provide a short description, the venue where the event will be held, and the schedule of your event.");
 							System.out.print("Name of event: ");
 							sc.nextLine();
-							String eventName = sc.nextLine();
+							eventName = sc.nextLine();
 						
 							System.out.print("Short description: ");
-							String description = sc.nextLine();
+							description = sc.nextLine();
 
 							System.out.print("Name of speaker: ");
-							String speaker = sc.nextLine();
+							speaker = sc.nextLine();
 						
 							System.out.print("\nMoving onto the venue you wish to hold your event at. \nPlease provide the name of the location: ");
-							String venueLocation = sc.nextLine();
+							venueLocation = sc.nextLine();
 							System.out.print("The floor your event will be held on: ");
-							int venueFloor = sc.nextInt();
+							venueFloor = sc.nextInt();
 						
 							System.out.print("The room number: ");
-							int venueRoom = sc.nextInt();
+							venueRoom = sc.nextInt();
 							sc.nextLine();
 						
 							System.out.print("The opening time of your chosen venue: ");
-							String venueOpening = sc.nextLine();
+							venueOpening = sc.nextLine();
 						
 							System.out.print("The closing time of your chosen venue: ");
-							String venueClosing = sc.nextLine();
+							venueClosing = sc.nextLine();
 						
 							System.out.print("The way you would like the seating to be arranged (ex: circular tables in a star formation): ");
-							String venueSeating = sc.nextLine();
+							venueSeating = sc.nextLine();
 						
-							Venue venue = new Venue (venueLocation, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
+							v = new Venue (venueLocation, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
 						
 							System.out.print("\nNow, please enter the schedule of your event. \nThe date your event will be held on: ");
-							String scheduleDate = sc.nextLine();
+							scheduleDate = sc.nextLine();
 						
 							System.out.print("The starting time of your event: ");
-							String scheduleStart = sc.nextLine();
+							scheduleStart = sc.nextLine();
 						
 							System.out.print("The time your event will end: ");
-							String scheduleEnd = sc.nextLine();
+							scheduleEnd = sc.nextLine();
 						
-							Schedule schedule = new Schedule (scheduleDate, scheduleStart, scheduleEnd);
+							sch = new Schedule (scheduleDate, scheduleStart, scheduleEnd);
 						
-							Event event = new Event (eventName, description, venue, schedule, speaker);
-							System.out.println("\nPlease make sure that the following information is correct.\nName of event: " + event.getEventName() + "\nDescription: " + event.getDescription());
-							System.out.println("Location name: " + venue.getLocation() + "\nFloor " + venue.getFloor() + ", room " + venue.getRoomNum() + "\nSeating arrangement: " + venue.getSeatingType() + "\nVenue opens at " + venue.getOpeningTime() + ", closes at " + venue.getClosingTime());
-							System.out.println("Event date: " + schedule.getDate() + "\nDuration: " + schedule.getDuration());
+							eTemp = new Event (eventName, description, v, sch, speaker);
+							System.out.println("\nPlease make sure that the following information is correct.\nName of event: " + eTemp.getEventName() + "\nDescription: " + eTemp.getDescription());
+							System.out.println("Location name: " + v.getLocation() + "\nFloor " + v.getFloor() + ", room " + v.getRoomNum() + "\nSeating arrangement: " + v.getSeatingType() + "\nVenue opens at " + v.getOpeningTime() + ", closes at " + v.getClosingTime());
+							System.out.println("Event date: " + sch.getDate() + "\nDuration: " + sch.getDuration());
 						
 							System.out.println("\nDoes the information above look correct? (y or n)");
-							String answer = sc.nextLine();
-						
-							if (answer.equals("y")) 
+							in = sc.next().charAt(0);
+							in = Character.toUpperCase(in);
+
+							if((in!='Y')&&(in!='N'))
 							{
-						   		System.out.println("Perfect! Your event has been booked. Thank you for booking with us! Your designated event number is given below, please use it when you want to close your event, or to change any details of the event.");
-						   		System.out.println("Your event number: " + event.getEventNumber());
-						   		System.out.println("\n");
-						   		eventList.add(event);
+								while((in!='Y')&&(in!='N'))
+								{
+									System.out.println("Invalid input. Please enter Y or N.");
+									in = sc.next().charAt(0);
+									in = Character.toUpperCase(in);
+								}
 							}
 						
-							else if(answer.equals("n")) 
+							if (in=='Y') 
 							{
-						   		System.out.println("Please re-enter your booking information.");
-						   		System.out.println("\n");
+						   		System.out.println("Perfect! Your event has been booked. Thank you for booking with us! Your designated event number is given below, please use it when you want to close your event, or to change any details of the event.");
+						   		System.out.println("Your event number: " + eTemp.getEventNumber() + "\n");
+						   		eventList.add(eTemp);
 							}
 						
 							else 
 							{
-						   		System.out.println("Incorrect format: please enter y or n.");
-						   		answer = sc.nextLine();
-						   
-						   		if (answer.equals("y")) 
-								{
-						      			System.out.println("Perfect! Your event has been booked. Thank you for booking with us! Your designated event number is given below, please use it when you want to close your event, or to change any details of the event.");
-						      			System.out.println("Your event number: " + event.getEventNumber());
-						      			System.out.println("\n");
-						      			eventList.add(event);
-						   		}
-						   
-						   		else if(answer.equals("n")) 
-								{
-						      			System.out.println("Please re-enter your booking information.");
-						      			System.out.println("\n");
-						   		}
+						   		System.out.println("Please re-enter your booking information.\n");
 							}
-						
-						
 						}
 						else if(in=='2')
 						{
 							System.out.println("Please enter your event number.");
 							sc.nextLine();
-							int eventNum = sc.nextInt();
+							eventNum = sc.nextInt();
 						
 							Iterator<Event> iterator = eventList.iterator();
-							boolean found = false;
+							found = false;
 						
 							while (iterator.hasNext()) 
 							{
-						   		Event event = iterator.next();
+						   		eTemp = iterator.next();
 						   
-						   		if (event.getEventNumber() == eventNum) 
+						   		if (eTemp.getEventNumber() == eventNum) 
 								{
 						      			found = true;
-						      			System.out.println("\nAre you sure you would like to close " + event.getEventName() + "? (y or n)");
+						      			System.out.println("\nAre you sure you would like to close " + eTemp.getEventName() + "? (y or n)");
 						      			sc.nextLine();
-						      			String answer = sc.nextLine();
-							
-						      
-						      			if (answer.equals("y")) 
+						      			in = sc.next().charAt(0);
+									in = Character.toUpperCase(in);
+
+									if((in!='Y')&&(in!='N'))
 									{
-						         			System.out.println("Closing " + event.getEventName() + "...\n");
-						         			event.closeEvent();
-						         			iterator.remove();
-						         			System.out.println("Event closed.");
-						         			System.out.println("\n");
-						      			}
-						      
-						      			else if (answer.equals("n")) 
-									{
-						         			System.out.println("Please try again and re-enter your event number.");
-						         			System.out.println("\n");
-						      			}
-						      
-									else 
-									{
-						         			System.out.println("Incorrect format: please enter y or n.");
-						        			answer = sc.nextLine();
-						   
-						         			if (answer.equals("y")) 
+										while((in!='Y')&&(in!='N'))
 										{
-						            				System.out.println("Closing " + event.getEventName() + "...");
-						            				event.closeEvent();
-						            				iterator.remove();
-						            				System.out.println("Event closed.");
-						            				System.out.println("\n");
-						         			}
-						   
-						         			else if(answer.equals("n")) 
-										{
-						            				System.out.println("Please try again and re-enter your event number.");
-						            				System.out.println("\n");
-						         			}
-						     
+											System.out.println("Invalid input. Please enter Y or N.");
+											in = sc.next().charAt(0);
+											in = Character.toUpperCase(in);
+										}
 									}
+							
+						      			if (in=='Y') 
+									{
+						         			System.out.println("Closing " + eTemp.getEventName() + "...\n");
+						         			eTemp.closeEvent();
+						         			iterator.remove();
+						         			System.out.println("Event closed.\n");
+						      			}
 						      
+						      			else 
+									{
+						         			System.out.println("Please try again and re-enter your event number.\n");
+						      			}
 								}
 							}
 							if (!found) 
 							{
-								System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.");
-						   		System.out.println("\n");
+								System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.\n");
 							}
 						}
 
@@ -415,198 +376,171 @@ public class EventProgram
 						{
 							System.out.println("\nPlease enter your event number.");
 							sc.nextLine();
-							int eventNum = sc.nextInt();
+							eventNum = sc.nextInt();
 						
-						
-							boolean found = false;
+							found = false;
 							Iterator<Event> iterator = eventList.iterator();
 						
 							while(iterator.hasNext()) 
 							{
-						   		Event event = iterator.next();
+						   		eTemp = iterator.next();
 						   
 						
-				                   		if(event.getEventNumber() == eventNum) 
+				                   		if(eTemp.getEventNumber() == eventNum) 
 								{
 				                      			found = true;
 				                      			System.out.print("\nNow input the new scheduling information. \nNew date: ");
 						      			sc.nextLine();
-						      			String newDate = sc.nextLine();
+						      			scheduleDate = sc.nextLine();
 						
 						      			System.out.print("New start time: ");
-						      			String newStart = sc.nextLine();
+						      			scheduleStart = sc.nextLine();
 						
 						      			System.out.print("New end time: ");
-						      			String newEnd = sc.nextLine();
+						      			scheduleEnd = sc.nextLine();
 						
-						      			Schedule newSchedule = new Schedule (newDate, newStart, newEnd);
-				                      			event.changeSchedule(newDate, newStart, newEnd);
+				                      			eTemp.changeSchedule(scheduleDate, scheduleStart, scheduleEnd);
 				                      			System.out.println("\nYour event schedule has been changed. Please check the information below, and make sure it is correct. Otherwise, please try again.");
-				                			System.out.print("\nNew date: " + event.getSchedule().getDate() + "\nNew duration: " + event.getSchedule().getDuration());
-				                			System.out.println("\n");
+				                			System.out.print("\nNew date: " + eTemp.getSchedule().getDate() + "\nNew duration: " + eTemp.getSchedule().getDuration() + "\n");
 				                   		}
-				                   
-				                   
 				                	}
-				                
-				                
+
 				                	if (!found) 
 							{
-						   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.");
-						   		System.out.println("\n");
+						   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.\n");
 							}
-			
 						}
 					
 						else if(in=='4')
 						{
 							System.out.println("\nPlease enter your event number.");
 							sc.nextLine();
-							int eventNum = sc.nextInt();
+							eventNum = sc.nextInt();
 						
 							Iterator<Event> iterator = eventList.iterator();
-							boolean found = false;
+							found = false;
 						
 							while (iterator.hasNext()) 
 							{
-						   		Event event = iterator.next();
-						   
-						   		if (event.getEventNumber() == eventNum) 
+						   		eTemp = iterator.next();
+						   		if (eTemp.getEventNumber() == eventNum) 
 								{
 						      			found = true;
-						      			System.out.println("\nEnter the duration of the break you would like to add to " + event.getEventName() + ". (Ex: 11:00am-11:30am)");
+						      			System.out.println("\nEnter the duration of the break you would like to add to " + eTemp.getEventName() + ". (Ex: 11:00am-11:30am)");
 						      			sc.nextLine();
-						      			String newBreak = sc.nextLine();
-						      
-					              			event.getSchedule().addBreak(newBreak);
-						      
+						      			newBreak = sc.nextLine();
+					              			eTemp.getSchedule().addBreak(newBreak);
 						      			System.out.println("Break added.\n");
-						      
 						   		}
-						   
-						  
 							}
 						
 							if (!found) 
 							{
-						   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.");
-						   		System.out.println("\n");
+						   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.\n");
 							}	
 						}
 					
 						else if(in=='5')
 						{
-							boolean looping = true;
+							looping = true;
 							while (looping) 
 							{
 								System.out.println("\nWelcome to the venue management system. What would you like to do?" + "\n1)Change an event's venue" + "\n2)Change seating arrangement" + "\n3)Back to event menu");
 							
-						        	char answer = sc.next().charAt(0);
+						        	in = sc.next().charAt(0);
 						        
-						        	if (answer=='1') 
+						        	if (in=='1') 
 								{
 						        		System.out.println("Please enter your event number.");
 									sc.nextLine();
-									int eventNum = sc.nextInt();
+									eventNum = sc.nextInt();
 								
 									Iterator<Event> iterator = eventList.iterator();
-									boolean found = false;
+									found = false;
 						
 									while (iterator.hasNext()) 
 									{
-						   		   		Event event = iterator.next();
+						   		   		eTemp = iterator.next();
 						   
-						   		   		if (event.getEventNumber() == eventNum) 
+						   		   		if (eTemp.getEventNumber() == eventNum) 
 										{
 						      		      			found = true;
-						      		      
 						      		      			System.out.print("Please enter the name of the new venue: ");
 						      		      			sc.nextLine();
-						      		      			String venueName = sc.nextLine();
+						      		      			venueLocation = sc.nextLine();
 						      		      
 						      		      			System.out.print("The new floor your event will be held on: ");
-						      		      			int venueFloor = sc.nextInt();
-						      		
-						      		      
+						      		      			venueFloor = sc.nextInt();
 						      		      			System.out.print("The new room your event will be held in: ");
-						      		      			int venueRoom = sc.nextInt();
+						      		      			venueRoom = sc.nextInt();
 						      		      
 						      		      			System.out.print("The opening time of your new venue: ");
 						      		      			sc.nextLine();
-						      		      			String venueOpening = sc.nextLine();
-						      		      
+						      		      			venueOpening = sc.nextLine();
 						      		      			System.out.print("The closing time of your new venue: ");
-						      		      			String venueClosing = sc.nextLine();
+						      		      			venueClosing = sc.nextLine();
 						      		      
 						      		      			System.out.print("The way the seating will be arranged: ");
-						      		      			String venueSeating = sc.nextLine();
+						      		      			venueSeating = sc.nextLine();
 						      		      
-						      		      			Venue venue = new Venue (venueName, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
+						      		      			v = new Venue (venueLocation, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
 						      		      
-						      		      			event.getVenue().changeVenue(venueName, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
+						      		      			eTemp.getVenue().changeVenue(venueLocation, venueFloor, venueRoom, venueOpening, venueClosing, venueSeating);
 						      		      
-						      		      			System.out.println("\nVenue changed. Please check that the information below looks correct. Otherwise, return to the venue menu and try again." + "\nVenue location: " + venue.getLocation() + "\non floor " + venue.getFloor() + ", room " + venue.getRoomNum() + "\nOpens at " + venue.getOpeningTime() + ", closes at " + venue.getClosingTime() + "\nSeating arrangement: " + venue.getSeatingType());
-						      		      			System.out.println("\n");
+						      		      			System.out.println("\nVenue changed. Please check that the information below looks correct. Otherwise, return to the venue menu and try again.\nVenue location: " + v.getLocation() + "\non floor " + v.getFloor() + ", room " + v.getRoomNum() + "\nOpens at " + v.getOpeningTime() + ", closes at " + v.getClosingTime() + "\nSeating arrangement: " + v.getSeatingType() + "\n");
 						      		   		}
 						      			}
 						      		
 						      			if (!found) 
 									{
-						                   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.");
-						   		   		System.out.println("\n");
+						                   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.\n");
 									}
 						      		      
 								
 						        	}
-						        	else if (answer=='2') 
+						        	else if (in=='2') 
 								{
 						        		System.out.println("Please enter your event number.");
 									sc.nextLine();
-									int eventNum = sc.nextInt();
+									eventNum = sc.nextInt();
 								
 									Iterator<Event> iterator = eventList.iterator();
-									boolean found = false;
+									found = false;
 						
 									while (iterator.hasNext()) 
 									{
-						   		   		Event event = iterator.next();
+						   		   		eTemp = iterator.next();
 						   
-						   		   		if (event.getEventNumber() == eventNum) 
+						   		   		if (eTemp.getEventNumber() == eventNum) 
 										{
 						      		      			found = true;
-						      		      
 						      		      			System.out.print("Enter the new way you would like your seats to be arranged: ");
 						      		      			sc.nextLine();
-						      		      			String newSeating = sc.nextLine();
+						      		      			venueSeating = sc.nextLine();
 						      		      
-						      		      			event.getVenue().changeSeatingType(newSeating);
-						      		      
-						      		      
+						      		      			eTemp.getVenue().changeSeatingType(venueSeating);
 						      		      			System.out.println("Seating arrangement successfully changed.");
 						      		   		}
 						      			}
 						      		
 						      			if (!found) 
 									{
-						                   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.");
-						   		   		System.out.println("\n");
+						                   		System.out.println("\nSeems like we couldn't find your event in the system. Please re-enter your event number, and try again.\n");
 									}
 						      		      
 						      		      
 						        	}
 						        
-						        	else if (answer=='3') 
+						        	else if (in=='3') 
 								{
 						        		looping = false;
 						        	}
-						        
 						        
 						        	else 
 								{
 						        		System.out.println("Invalid answer, please type one of the numbers provided.");
 						        
 						        	}
-							
 							}
 						}
 
@@ -614,7 +548,7 @@ public class EventProgram
 						{
 							System.out.println("Please enter your event number.");
 							sc.nextLine();
-							int eventNum = sc.nextInt();
+							eventNum = sc.nextInt();
 
 							for(int i=0;i<eventList.size();i++)
 							{
@@ -644,7 +578,7 @@ public class EventProgram
 							if(in=='Y')
 							{
 								System.out.println("Enter the event number.");
-								int eventNum = sc.nextInt();
+								eventNum = sc.nextInt();
 								for(int i=0;i<eventList.size();i++)
 								{
 									if(eventNum==(eventList.get(i)).getEventNumber())
@@ -692,16 +626,16 @@ public class EventProgram
 				{
 					loop = true;
 					System.out.println("Are you an attendee (A) or staff (S)?");
-					ch = sc.next().charAt(0);
-					ch2 = Character.toUpperCase(ch);
+					in = sc.next().charAt(0);
+					in = Character.toUpperCase(in);
 
-					if((ch2!='S')&&(ch2!='A'))
+					if((in!='S')&&(in!='A'))
 					{
-						while((ch2!='S')&&(ch2!='A'))
+						while((in!='S')&&(in!='A'))
 						{
 							System.out.println("Invalid input. Please enter A or S.");
-							ch = sc.next().charAt(0);
-							ch2 = Character.toUpperCase(ch);
+							in = sc.next().charAt(0);
+							in = Character.toUpperCase(in);
 						}
 
 					}

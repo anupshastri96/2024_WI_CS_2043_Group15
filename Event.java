@@ -78,7 +78,6 @@ public class Event
 			}
 			count++;
 		}
-		System.out.println(ticketsSold.size());
 	}
 
 	public void closeEvent()
